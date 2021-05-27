@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Candidate;
 use App\Helpers\Helper;
+use App\Models\Degree;
 use App\Models\Image;
 use Auth;
 
@@ -20,7 +21,8 @@ class CandidateController extends Controller
     {
         $candidates = Candidate::where('election_id', Helper::get_active_election() ? Helper::get_active_election()->id : 0)
                         ->simplePaginate(20);
-        return view('admin.candidate.index', compact('candidates'));
+        $degree = Degree::all();
+        return view('admin.candidate.index', compact('candidates', 'degree'));
     }
 
     /**
@@ -105,9 +107,9 @@ class CandidateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Candidate $candidate)
     {
-        //
+        // 
     }
 
     /**
@@ -117,9 +119,50 @@ class CandidateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Candidate $candidate)
     {
-        //
+        $check = Validator::make($request->all(), [
+            'degree_id' => ['required'],
+            'area_of_study' => ['required'],
+            'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
+            'agenda' => ['required']
+        ]);
+
+        if ($check->fails()) {
+            toastr()->error($check->messages()->first());
+            return redirect()->back()->withInput();
+        }
+
+        $candidate->update([
+            'name' => $request->name,
+            'degree_id' => $request->degree_id,
+            'area_of_study' => $request->area_of_study,
+            'agenda' => $request->agenda
+        ]);
+
+        if (!empty($request->image)){
+            $check = Validator::make($request->all(), [
+                'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
+            ]);
+
+            if ($check->fails()) {
+                toastr()->error($check->messages()->first());
+                return redirect()->back()->withInput();
+            }
+            // This will store the image
+            $request->image->store('public/image');
+            // This will get the new name
+            $hash_name = $request->image->hashName();
+
+            $image = Image::create(['hash_name' => $hash_name]);
+
+            $candidate->update([
+                'image_id' => $image->id
+            ]);
+        }
+
+        toastr()->success("Candidate info updated successfully.");
+        return redirect()->back();
     }
 
     /**

@@ -206,7 +206,7 @@
             </form>
           </div>
           <div class="row" style="margin-top: 10px;">
-            @foreach($election->candidates as $value)
+            @foreach($election->candidates as $key => $value)
               <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch animate__animated animate__pulse filter-{{ $value->position->id }}">
                 <div class="card bg-light">
                   <div class="card-header text-muted border-bottom-0">
@@ -228,7 +228,7 @@
                   </div>
                   <div class="card-footer">
                     <div class="text-right">
-                      <a href="#" class="btn btn-sm bg-teal">
+                      <a data-toggle="modal" data-target="#update-candidate-{{ $key }}" class="btn btn-sm bg-teal">
                         <i class="fa fa-edit"></i>
                       </a>
                       <a href="{{ route('candidates.show', $value->id) }}" class="btn btn-sm btn-primary">
@@ -238,6 +238,85 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Update candidate modal -->
+              <div class="modal fade" id="update-candidate-{{ $key }}">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h6 class="modal-title">Update Candidate Info</h6>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <form action="{{ route('candidates.update', $value->id) }}" method="post" enctype="multipart/form-data">
+                      @csrf
+                      @method('PUT')
+
+                      <div class="modal-body">
+                        <div class="col-12 col-sm-12 col-md-12 d-flex align-items-stretch">
+                          <div class="card bg-light">
+                              <div class="card-header text-muted border-bottom-0 nc-position">
+                                
+                              </div>
+                            <div class="card-body pt-0">
+                              <div class="row">
+                                <div class="col-7">
+                                  
+                                  <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-3 col-form-label text-sm">Name</label>
+                                    <div class="col-sm-9">
+                                      <input class="form-control form-control-sm" type="text" placeholder="Candidate Name" name="name" required="" value="{{ $value->name }}">
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-3 col-form-label text-sm">Degree</label>
+                                    <div class="col-sm-9">
+                                      <select class="form-control form-control-sm" name="degree_id" required="">
+                                        <option value="">Ex: Bachelor's</option>
+                                        @foreach($degree as $d)
+                                          <option value="{{ $d->id }}" {{ $value->degree_id == $d->id ? "selected" : "" }}>{{ $d->name }}</option>
+                                        @endforeach
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-3 col-form-label text-sm">Area of Study</label>
+                                    <div class="col-sm-9">
+                                      <input class="form-control form-control-sm" type="text" placeholder="Ex: Computer Science" name="area_of_study" required="" value="{{ $value->area_of_study }}">
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-3 col-form-label text-sm">Agenda</label>
+                                    <div class="col-sm-9">
+                                      <textarea class="form-control form-control-sm" name="agenda" required="">{{ $value->agenda }}</textarea>
+                                    </div>
+                                  </div>
+
+                                </div>
+                                <div class="col-5 text-center">
+                                  <img src="{{ !empty($value->image->hash_name) ? url('storage/image/'. $value->image->hash_name) : asset('dist/img/default-candidate.png') }}" alt="user-avatar" class="img-circle img-fluid change" style="cursor: pointer;" title="Click to change image">
+                                  <input hidden="" type="file" name="image" class="img-file" data-old_src="{{ !empty($value->image->hash_name) ? url('storage/image/'. $value->image->hash_name) : asset('dist/img/default-candidate.png') }}">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Save and Close</button>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+              </div>
+              <!-- /.modal -->
             @endforeach
           </div>
         </div>
@@ -343,7 +422,7 @@
                     </div>
                     <div class="col-5 text-center">
                       <img src="{{ asset('dist/img/default-candidate.png') }}" alt="user-avatar" class="img-circle img-fluid change" style="cursor: pointer;" title="Click to change image">
-                      <input type="file" name="image" hidden="" id="nc-img">
+                      <input type="file" name="image" hidden="" class="img-file" data-old_src="{{ asset('dist/img/default-candidate.png') }}">
                     </div>
                   </div>
                 </div>
@@ -488,12 +567,12 @@
       $(this).siblings('input').click()
     })
 
-    $('#nc-img').on('change', function(){
+    $('input.img-file').on('change', function(){
       if (event.target.files[0]) {
-        $('img.change').attr("src", URL.createObjectURL(event.target.files[0]));
+        $(this).siblings().attr("src", URL.createObjectURL(event.target.files[0]));
         return true;
       }
-      $('img.change').attr("src", "{{ asset('dist/img/default-candidate.png') }}");
+      $(this).siblings().attr("src", $(this).data('old_src'));
     })
 
     $('.edit-info').on('click', function(){
@@ -502,6 +581,7 @@
       $(this).siblings('input').show()
       $(this).siblings('button').show()
     })
+
     
   </script>
 @endsection
