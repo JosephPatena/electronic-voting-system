@@ -39,7 +39,8 @@ class PositionController extends Controller
     {
         $check = Validator::make($request->all(), [
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
-            'number_elected' => ['required']
+            'number_elected' => ['required'],
+            'max_selected' => ['required']
         ]);
 
         if ($check->fails()) {
@@ -50,7 +51,8 @@ class PositionController extends Controller
         Position::create([
             'election_id' => decrypt($request->election_id),
             'name' => $request->name,
-            'number_elected' => $request->number_elected
+            'number_elected' => $request->number_elected,
+            'max_selected' => $request->max_selected
         ]);
 
         toastr()->success("Position registered successfully.");
@@ -90,7 +92,8 @@ class PositionController extends Controller
     {
         $check = Validator::make($request->all(), [
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
-            'number_elected' => ['required']
+            'number_elected' => ['required'],
+            'max_selected' => ['required']
         ]);
 
         if ($check->fails()) {
@@ -100,7 +103,8 @@ class PositionController extends Controller
 
         $position->update([
             'name' => $request->name,
-            'number_elected' => $request->number_elected
+            'number_elected' => $request->number_elected,
+            'max_selected' => $request->max_selected
         ]);
 
         toastr()->success("Position updated successfully.");

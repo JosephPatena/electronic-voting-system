@@ -157,8 +157,8 @@
               <input type="radio" autocomplete="off" checked> All
             </label>
             @foreach($election->positions as $value)
-              <label class="btn bg-olive position-selector" data-id="{{ $value->id }}" data-name="{{ $value->name }}" data-number_elected="{{ $value->number_elected }}" data-filter="{{ "filter-".$value->id }}">
-                <input type="radio" autocomplete="off"> {{ $value->name }} &nbsp; <span class="badge bg-success">{{ $value->number_elected }}</span>
+              <label class="btn bg-olive position-selector" data-id="{{ $value->id }}" data-name="{{ $value->name }}" data-number_elected="{{ $value->number_elected }}" data-max_selected="{{ $value->max_selected }}" data-filter="{{ "filter-".$value->id }}">
+                <input type="radio" autocomplete="off"> {{ $value->name }}
               </label>
             @endforeach
           </div>
@@ -174,6 +174,7 @@
                   <tr>
                     <th>Position Name</th>
                     <th>Number Elected</th>
+                    <th>Maximum Selected</th>
                     <th class="text-center">Action</th>
                   </tr>
                 </thead>
@@ -186,6 +187,10 @@
                     <td class="number_elected">
                       <span></span>
                       <input type="number" name="number_elected" required="" placeholder="Number Elected" class="form-control" style="display: none;">
+                    </td>
+                    <td class="max_selected">
+                      <span></span>
+                      <input type="number" name="max_selected" required="" placeholder="Max Selected" class="form-control" style="display: none;">
                     </td>
                     <td class="text-center">
                       <div class="btn-group">
@@ -438,12 +443,15 @@
       let id = $(this).data('id')
       let name = $(this).data('name')
       let number_elected = $(this).data('number_elected')
+      let max_selected = $(this).data('max_selected')
       let filter = $(this).data('filter')
 
       $('.position_name').children('span').text(name)
       $('.position_name').children('input').val(name)
       $('.number_elected').children('span').text(number_elected)
       $('.number_elected').children('input').val(number_elected)
+      $('.max_selected').children('span').text(max_selected)
+      $('.max_selected').children('input').val(max_selected)
       $('.table-responsive').show()
       $('.table-responsive').children().attr('action', '{{ route('positions.update', '') }}/'+id)
       $('#new-candidate').find('form').children('input[name="position_id"]').val(id)

@@ -40,7 +40,7 @@
 	              <!-- Add the bg color to the header using any of the bg-* classes -->
 	              <div class="widget-user-header bg-info">
 	                <h3 class="widget-user-username">{{ Auth::user()->name }}</h3>
-	                <h5 class="widget-user-desc">Admin</h5>
+	                <h5 class="widget-user-desc">Teacher</h5>
 	              </div>
 	              <div class="widget-user-image">
 	                <img class="img-circle elevation-2 change" src="{{ !empty(Helper::get_user_image()) ? url('storage/image/'.Helper::get_user_image()->hash_name) : asset('dist/img/default-user.png') }}" alt="User Avatar" style="cursor: pointer;" title="Click to Change Photo">

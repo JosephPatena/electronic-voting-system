@@ -18,6 +18,7 @@ class CreatePositionsTable extends Migration
             $table->foreignId('election_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->integer('number_elected');
+            $table->integer('max_selected');
             $table->timestamps();
         });
     }

@@ -75,7 +75,7 @@
       			        <h3 class="card-title position">{{ $position->name }}</h3>
                     <br>
                     <a class="btn btn-primary btn-sm float-right view-summary" data-toggle="modal" data-target="#choices-summary">View Summary</a>
-                    Please select only <span class="badge bg-primary number-elected">{{ $position->number_elected }}</span> candidate(s).
+                    Please select only <span class="badge bg-primary max-selected">{{ $position->max_selected }}</span> candidate(s).
       			      </div>
       			      <!-- /.card-body -->
       			    </div>
@@ -199,14 +199,14 @@
 
       element.toggleClass('selected')
       let parent = element.parent().parent().parent().parent().parent().siblings()
-      let num_elec = parent.find('.number-elected').text()
+      let max_selected = parent.find('.max-selected').text()
       let selected = parent.siblings().find('.selected').length
 
-      if (parseInt(selected) <= parseInt(num_elec)) {
+      if (parseInt(selected) <= parseInt(max_selected)) {
         return true;
       }
 
-      toastr.error("You can select only "+num_elec+" candidate(s). Please deselect before proceeding.")
+      toastr.error("You can select only "+max_selected+" candidate(s). Please deselect before proceeding.")
       element.prop('checked', false)
       element.toggleClass('selected')  
     })

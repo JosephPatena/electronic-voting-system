@@ -111,7 +111,7 @@
             </label>
             @foreach($election->positions as $value)
               <label class="btn bg-olive position-selector" data-filter="{{ "filter-".$value->id }}">
-                <input type="radio" autocomplete="off"> {{ $value->name }} &nbsp; <span class="badge bg-success">{{ $value->number_elected }}</span>
+                <input type="radio" autocomplete="off"> {{ $value->name }}
               </label>
             @endforeach
           </div>
