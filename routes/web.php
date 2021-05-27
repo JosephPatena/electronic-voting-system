@@ -78,6 +78,14 @@ Route::group(['middleware' => 'auth'], function(){
 
 	# Authorize
 	Route::post('check-password', [AuthController::class, 'check_password'])->name('check_password');
+
+	# Candidate
+	Route::resource('candidates', CandidateController::class);
+
+	# Profile
+	Route::get('profile', [AuthController::class, 'profile'])->name('profile');
+	Route::post('update-profile/{id}', [AuthController::class, 'update_profile'])->name('update_profile');
+	Route::get('user-access/enable-disable/{id}', [AuthController::class, 'enable_disable_access'])->name('enable_disable_access');
 });
 
 /*
@@ -97,9 +105,6 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 	# Position
 	Route::resource('positions', PositionController::class);
 
-	# Candidate
-	Route::resource('candidates', CandidateController::class);
-
 	# Teacher
 	Route::resource('teachers', TeacherController::class);
 	Route::get('invite-teachers/{type}', [TeacherController::class, 'invite_teachers'])->name('invite_teachers');
@@ -116,7 +121,7 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 | Teacher routes
 |--------------------------------------------------------------------------
 */
-Route::group(['middleware' => ['teacher', 'auth']], function(){
+Route::group(['middleware' => ['teacher', 'auth', 'restriction']], function(){
 	# Homepage
 	Route::get('teacher/homepage', [HomepageController::class, 'teacher_homepage'])->name('teacher_homepage');
 
@@ -130,7 +135,7 @@ Route::group(['middleware' => ['teacher', 'auth']], function(){
 | Student routes
 |--------------------------------------------------------------------------
 */
-Route::group(['middleware' => ['student', 'auth']], function(){
+Route::group(['middleware' => ['student', 'auth', 'restriction']], function(){
 	# Homepage
 	Route::get('student/homepage', [HomepageController::class, 'student_homepage'])->name('student_homepage');
 

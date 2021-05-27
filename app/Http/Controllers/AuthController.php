@@ -10,6 +10,7 @@ use Auth;
 use App\Models\TeachersKey;
 use App\Models\StudentsKey;
 use App\Models\Degree;
+use App\Models\Image;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -140,5 +141,96 @@ class AuthController extends Controller
             return response()->json(true);    
         }
         return response()->json(false);
+    }
+
+    public function profile(){
+        if (Auth::user()->role_id == 1)
+        {
+            return view('admin.profile.index');
+        }
+        if (Auth::user()->role_id == 2)
+        {
+            return view('teacher.profile.index');
+        }
+        if (Auth::user()->role_id == 3)
+        {
+            return view('student.profile.index');
+        }
+    }
+
+    public function update_profile(Request $request, $id){
+        $email_validation = array('required', 'string', 'max:255', 'unique:users');
+        if (Auth::user()->email == $request->email)
+        {
+            $email_validation = array_diff($email_validation, array('unique:users'));
+        }
+
+        $validate = Validator::make($request->all(), [
+            'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
+            'email' => $email_validation
+        ]);
+
+        if ($validate->fails()) {
+            toastr()->error($validate->messages()->first());
+            return redirect()->back()->withInput();
+        }
+
+        User::findOrFail(decrypt($id))->update([
+            'name' => $request->name,
+            'email' => $request->email
+        ]);
+
+        if(isset($request->change_pass)){
+            $validate = Validator::make($request->all(), [
+                'password' => ['required', 'string', 'min:8', 'alpha_dash'],
+                'confirm_password' => ['required', 'same:password']
+            ]);
+
+            if ($validate->fails()) {
+                toastr()->error($validate->messages()->first());
+                return redirect()->back()->withInput();
+            }
+
+            User::findOrFail(decrypt($id))->update([
+                'password' => Hash::make($request->password)
+            ]);
+        }
+
+        if (!empty($request->image)) {
+            $check = Validator::make($request->all(), [
+                'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000'
+            ]);
+
+            if ($check->fails()) {
+                toastr()->error($check->messages()->first());
+                return redirect()->back()->withInput();
+            }
+
+            // This will store the image
+            $request->image->store('public/image');
+            // This will get the new name
+            $hash_name = $request->image->hashName();
+
+            $image = Image::create(['hash_name' => $hash_name]);
+
+            User::findOrFail(decrypt($id))->update([
+                'image_id' => $image->id
+            ]);
+        }
+
+        toastr()->success("Profile updated successfully");
+        return redirect()->back();
+    }
+
+    public function enable_disable_access($id){
+        if (User::findOrFail(decrypt($id))->restricted) {
+            User::findOrFail(decrypt($id))->update(['restricted' => false]);
+            toastr()->success("User access enabled successfully");
+        }else{
+            User::findOrFail(decrypt($id))->update(['restricted' => true]);
+            toastr()->success("User access disabled successfully");
+        }
+
+        return redirect()->back();
     }
 }

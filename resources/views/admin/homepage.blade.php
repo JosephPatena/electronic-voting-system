@@ -49,6 +49,7 @@
 	    <div class="row">
     	  @php
   		  	$election = Helper::get_active_election();
+  		  	$overview = Helper::get_hours($election);
       	  @endphp
       	  
       	  @if(count(Helper::get_elections()) > 1)
@@ -74,7 +75,7 @@
 	          <div class="card-header border-0">
 	            <h3 class="card-title">
 	              <i class="fas fa-poll-h"></i>
-	              Election Overview
+	              Votes Traffic
 	            </h3>
 
 	            <div class="card-tools">
@@ -258,7 +259,11 @@
 		  // $('#revenue-chart').get(0).getContext('2d');
 
 		  var salesGraphChartData = {
-		    labels: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
+		    labels: [
+		    	@foreach($overview[0] as $value)
+		    	"{{ $value }}",
+		    	@endforeach
+		    ],
 		    datasets: [
 		      {
 		        label: 'Digital Goods',
@@ -271,7 +276,11 @@
 		        pointHoverRadius: 7,
 		        pointColor: '#efefef',
 		        pointBackgroundColor: '#efefef',
-		        data: [2666, 2778, 4912, 3767, 6810, 5670, 4820, 15073, 10687, 8432]
+		        data: [
+		        	@foreach($overview[1] as $value)
+		    	{{ $value }},
+		    	@endforeach
+		        ]
 		      }
 		    ]
 		  }

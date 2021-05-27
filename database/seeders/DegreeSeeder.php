@@ -62,7 +62,7 @@ class DegreeSeeder extends Seeder
             "Master of Science (MS)",
             "Master of Social Work (MSW)",
             "Master of Technology (MTech)",
-            "Master of PUblic Adminitration (MPA)",
+            "Master of Public Adminitration (MPA)",
             "Master of Design (MDes)",
             "Master of Industrial Design",
             "Master of Engineering (MEng)",

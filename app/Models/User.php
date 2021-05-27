@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\TeachersKey;
 use App\Models\StudentsKey;
 use App\Models\Degree;
+use App\Models\Image;
 use App\Models\Vote;
 
 class User extends Authenticatable
@@ -31,6 +32,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'restricted'
     ];
 
     /**
@@ -66,5 +68,9 @@ class User extends Authenticatable
 
     public function degree(){
         return $this->belongsTo(Degree::class);
+    }
+
+    public function image(){
+        return $this->belongsTo(Image::class);
     }
 }

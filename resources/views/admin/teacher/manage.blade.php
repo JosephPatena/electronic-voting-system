@@ -40,34 +40,40 @@
             <div class="card card-widget widget-user">
               <!-- Add the bg color to the header using any of the bg-* classes -->
               <div class="widget-user-header bg-info">
-                <h3 class="widget-user-username">Alexander Pierce</h3>
-                <h5 class="widget-user-desc">Founder & CEO</h5>
+                <h3 class="widget-user-username">{{ $teacher->name }}</h3>
+                <h5 class="widget-user-desc">Educator</h5>
               </div>
               <div class="widget-user-image">
-                <img class="img-circle elevation-2" src="../dist/img/user1-128x128.jpg" alt="User Avatar">
+                <img class="img-circle elevation-2" src="{{ !empty($teacher->image->hash_name) ? url('storage/image/'.$teacher->image->hash_name) : asset('dist/img/default-user.png') }}" alt="User Avatar">
               </div>
               <div class="card-footer">
                 <div class="row">
                   <div class="col-sm-4 border-right">
                     <div class="description-block">
-                      <h5 class="description-header">3,200</h5>
-                      <span class="description-text">SALES</span>
+                      <h5 class="description-header">{{ Helper::unregistered_students($teacher)->count() }}</h5>
+                      <span class="description-text">UNREGISTERED STUDENTS</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-4 border-right">
                     <div class="description-block">
-                      <h5 class="description-header">13,000</h5>
-                      <span class="description-text">FOLLOWERS</span>
+                      <h5 class="description-header">{{ Helper::students($teacher->id)->count() }}</h5>
+                      <span class="description-text">REGISTERED STUDENTS</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-4">
                     <div class="description-block">
-                      <h5 class="description-header">35</h5>
-                      <span class="description-text">PRODUCTS</span>
+                      <h5 class="description-header">
+                        @if($teacher->restricted)
+                          <span class="badge badge-warning">Access Disabled</span>
+                        @else
+                          <span class="badge badge-success">Access Enabled</span>
+                        @endif
+                      </h5>
+                      <span class="description-text">STATUS</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
@@ -79,51 +85,61 @@
             <!-- /.widget-user -->
 	      </div>
 	      <div class="col-8">
-			<div class="card">
+			    <div class="card">
 	          <div class="card-header">
-	            <h3 class="card-title">DataTable with default features</h3>
+	            <h3 class="card-title">Students</h3>
 	          </div>
 	          <!-- /.card-header -->
-	          <div class="card-body">
-	            <table id="example1" class="table table-bordered table-striped">
-	              <thead>
-	              <tr>
-	                <th>Election Name</th>
-	                <th>Participation</th>
-	                <th>Voters</th>
-	                <th>Teachers</th>
-	                <th>Course</th>
-	                <th>Position Candidate</th>
-	                <th>Status</th>
-	              </tr>
-	              </thead>
-	              <tbody>
-	              	{{-- @foreach($elections as $value)
-	              		<tr>
-	              			<td>{{ $value->name }}</td>
-	              			<td>{{ $value->name }}</td>
-	              			<td>{{ $value->name }}</td>
-	              			<td>{{ $value->name }}</td>
-	              			<td>{{ $value->name }}</td>
-	              			<td>{{ $value->name }}</td>
-	              			<td>
-	              				<form action="{{ route('elections.destroy', $value->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <i class="fas fa-ellipsis-v" style="float: right; cursor: pointer;" data-toggle="dropdown"></i>
-                                    <div role="menu" class="dropdown-menu">
-                                        <a href="{{ route('elections.show', $value->id) }}" class="dropdown-item">Manage Election</a>
-                                        <a href="#" class="dropdown-item delete-contact">Delete Election</a>
-                                        <a href="#" class="dropdown-item delete-contact">Stop Election</a>
-                                    </div>
-                                 </form>
-	              			</td>
-	              		</tr>
-	              	@endforeach --}}
-	              </tbody>
-	            </table>
-	          </div>
-	          <!-- /.card-body -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Course</th>
+                  <th>Teacher</th>
+                  <th>Date Registered</th>
+                  <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @php
+                    $students = Helper::students($teacher->id)->simplePaginate(20);
+                  @endphp
+                  @foreach($students as $value)
+                    <tr>
+                      <td>{{ $value->name }}</td>
+                      <td>{{ $value->email }}</td>
+                      <td>{{ $value->students_key->email }}</td>
+                      <td>{{ $value->degree->name." ".$value->area_of_study }}</td>
+                      <td>{{ Helper::user($value->teacher_id)->name }}</td>
+                      <td><span class="badge badge-primary">{{ $value->created_at }}</span></td>
+                      <td>
+                        <i class="fas fa-ellipsis-v" style="float: right; cursor: pointer;" data-toggle="dropdown"></i>
+                        <div role="menu" class="dropdown-menu">
+                            <a href="#" class="dropdown-item delete-contact">Disable Access</a>
+                        </div>
+                        @if($value->votes->count())
+                          <span class="badge badge-success">Has Voted</span>
+                        @else
+                          <span class="badge badge-warning">Hasn't Voted Yet</span>
+                        @endif
+                        @if($value->restricted)
+                          <span class="badge badge-warning">Access Disabled</span>
+                        @else
+                          <span class="badge badge-success">Access Enabled</span>
+                        @endif
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+              <center>
+                  {{ $students->links() }}
+              </center>
+            </div>
+            <!-- /.card-body -->
 	        </div>
 	      </div>
 	  	</div>

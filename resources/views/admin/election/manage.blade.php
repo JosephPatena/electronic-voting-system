@@ -226,7 +226,7 @@
                       <a href="#" class="btn btn-sm bg-teal">
                         <i class="fa fa-edit"></i>
                       </a>
-                      <a href="#" class="btn btn-sm btn-primary">
+                      <a href="{{ route('candidates.show', $value->id) }}" class="btn btn-sm btn-primary">
                         <i class="fas fa-user"></i>&nbsp;&nbsp;View Profile
                       </a>
                     </div>
@@ -338,7 +338,7 @@
                     </div>
                     <div class="col-5 text-center">
                       <img src="{{ asset('dist/img/default-candidate.png') }}" alt="user-avatar" class="img-circle img-fluid change" style="cursor: pointer;" title="Click to change image">
-                      <input type="file" name="image" hidden="" id="nc-img" required="">
+                      <input type="file" name="image" hidden="" id="nc-img">
                     </div>
                   </div>
                 </div>
@@ -481,10 +481,11 @@
     })
 
     $('#nc-img').on('change', function(){
-        var total_file=document.getElementById("nc-img").files.length;
-        for(var i=0;i<total_file;i++){
-            $('img.change').attr("src", URL.createObjectURL(event.target.files[i]));
-        }
+      if (event.target.files[0]) {
+        $('img.change').attr("src", URL.createObjectURL(event.target.files[0]));
+        return true;
+      }
+      $('img.change').attr("src", "{{ asset('dist/img/default-candidate.png') }}");
     })
 
     $('.edit-info').on('click', function(){

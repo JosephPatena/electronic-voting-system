@@ -76,14 +76,26 @@
                 <tbody>
                   @foreach($courses as $key => $value)
                     <tr>
-                      <td class="text-center">{{ $key+1 }}.</td>
-                      <td>{{ $value->name }}</td>
-                      <td class="text-center">
-                        <div class="btn-group">
-                          <button class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                      </td>
+                      <form action="{{ route('courses.update', $value->id) }}" method="post">
+                        @csrf
+                        @method('PUT')
+                        <td class="text-center">{{ $key+1 }}.</td>
+                        <td>
+                          <span>{{ $value->name }}</span>
+                          <input type="text" style="display: none;" name="name" value="{{ $value->name }}" class="form-control" required="">
+                        </td>
+                        <td class="text-center">
+                          <div class="btn-group">
+                            <button class="btn btn-primary btn-sm edit"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-success btn-sm save" type="submit" style="display: none;"><i class="fas fa-save"></i></button>
+                            <button class="btn btn-danger btn-sm delete" data-key={{ $key }}><i class="fas fa-trash-alt"></i></button>
+                          </div>
+                        </td>
+                      </form>
+                      <form action="{{ route('courses.destroy', $value->id) }}" method="post" class="delete{{ $key }}">
+                        @csrf
+                        @method('DELETE')
+                      </form>
                     </tr>
                   @endforeach
                 </tbody>
@@ -134,5 +146,25 @@
         "autoWidth": false,
         "responsive": true,
       });
+
+      $(document).on('click', 'button.edit', function(evt){
+        evt.preventDefault();
+
+        $(this).parent().parent().siblings().children('span').hide()
+        $(this).parent().parent().siblings().children('input').show()
+        $(this).hide()
+        $(this).siblings('button.save').show()
+      })
+
+      $(document).on('click', 'button.delete', function(evt){
+        evt.preventDefault();
+        let element = $(this)
+
+        let check = confirm("Are you sure you want to remove this item? All associated data with this item will also going to be deleted. This process cannot be undone.");
+        if (check) {
+          $('form.delete' + element.data('key')).submit()
+        }
+
+      })
     </script>
 @endsection

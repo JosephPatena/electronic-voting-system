@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Candidate;
 use App\Helpers\Helper;
 use App\Models\Image;
+use Auth;
 
 class CandidateController extends Controller
 {
@@ -82,9 +83,20 @@ class CandidateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Candidate $candidate)
     {
-        //
+        if (Auth::user()->role_id == 1)
+        {
+            return view('admin.candidate.profile', compact('candidate'));
+        }
+        if (Auth::user()->role_id == 2)
+        {
+            return view('teacher.candidate.profile', compact('candidate'));
+        }
+        if (Auth::user()->role_id == 3)
+        {
+            return view('student.candidate.profile', compact('candidate'));
+        }
     }
 
     /**

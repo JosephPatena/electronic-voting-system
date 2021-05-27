@@ -50,7 +50,7 @@
 	                <th>Email</th>
 	                <th>Course</th>
 	                <th>Date Register</th>
-	                <th>Action</th>
+	                <th>Status</th>
 	              </tr>
 	              </thead>
 	              <tbody>
@@ -62,15 +62,21 @@
 	              			<td>{{ $value->degree->name." ".$value->area_of_study }}</td>
 	              			<td><span class="badge badge-primary">{{ $value->created_at }}</span></td>
 	              			<td>
-	              				<form action="{{ route('students.destroy', $value->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <i class="fas fa-ellipsis-v" style="float: right; cursor: pointer;" data-toggle="dropdown"></i>
-                                    <div role="menu" class="dropdown-menu">
-                                        <a href="{{ route('students.show', $value->id) }}" class="dropdown-item">Manage Teacher</a>
-                                        <a href="#" class="dropdown-item delete-contact">Delete Teacher</a>
-                                    </div>
-                                 </form>
+                                <i class="fas fa-ellipsis-v" style="float: right; cursor: pointer;" data-toggle="dropdown"></i>
+                                <div role="menu" class="dropdown-menu">
+                                    <a href="{{ route('enable_disable_access', encrypt($value->id)) }}" class="dropdown-item">{{ $value->restricted ? "Enable Access" : "Disable Access" }}</a>
+                                </div>
+                                @if($value->votes->count())
+                                	<span class="badge badge-success">Has Voted</span>
+                                @else
+                                	<span class="badge badge-warning">Hasn't Voted Yet</span>
+                                @endif
+
+                                @if($value->restricted)
+		                          <span class="badge badge-warning">Access Disabled</span>
+		                        @else
+		                          <span class="badge badge-success">Access Enabled</span>
+		                        @endif
 	              			</td>
 	              		</tr>
 	              	@endforeach

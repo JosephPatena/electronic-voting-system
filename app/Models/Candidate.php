@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Election;
 use App\Models\Position;
 use App\Models\Degree;
 use App\Models\Image;
@@ -29,5 +30,9 @@ class Candidate extends Model
 
     public function votes(){
         return $this->hasMany(Vote::class);
+    }
+
+    public function election(){
+        return $this->belongsTo(Election::class, 'election_id');
     }
 }

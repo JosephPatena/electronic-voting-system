@@ -138,7 +138,7 @@
                   </div>
                   <div class="card-footer">
                     <div class="text-right">
-                      <a href="#" class="btn btn-sm btn-primary">
+                      <a href="{{ route('candidates.show', $value->id) }}" class="btn btn-sm btn-primary">
                         <i class="fas fa-user"></i>&nbsp;&nbsp;View Profile
                       </a>
                     </div>

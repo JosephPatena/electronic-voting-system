@@ -7,11 +7,14 @@ use Auth;
 use Session;
 use DateTime;
 
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
-use App\Models\ELection;
-use App\Models\Image;
 use App\Models\User;
+use App\Models\Vote;
+use App\Models\Image;
+use App\Models\ELection;
+use App\Models\StudentsKey;
 
 class Helper
 {
@@ -86,21 +89,57 @@ class Helper
 	}
 
 	public static function students($teacher_id){
-		return User::where('teacher_id', $teacher_id)->get();
+		return User::where('teacher_id', $teacher_id);
 	}
 
 	public static function user($id){
 		return User::find($id);
 	}
 
+	public static function unregistered_students($user){
+		return StudentsKey::orderBy('user_id', 'asc')
+                        	->where('election_id', $user->election_id)
+                            ->where('teacher_id', $user->id);
+	}
+
 	public static function get_hours($election){
-		$period = CarbonPeriod::create("2020-5-20", "2020-5-30");
+		$from = new DateTime($election->date_start);
+		$to = new DateTime($election->date_end);
+		$period = CarbonPeriod::create($from, $to);
+
 		foreach ($period as $date) {
-		  // Insert Dates into listOfDates Array
-		  $listOfDates[] = $date->format('h');
+		  $listOfDates[] = $date->format('Y-m-d H:i:s');
 		}
 
-		// Now You Can Review This Array
-		dd($listOfDates);
+		$title = array();
+		$value = array();
+		if (count($listOfDates) == 1) {
+			$start = $from->format('H');
+			$end = $to->format('H');
+
+			for ($i=$start; $i <= $end; $i++) {
+				if ($i % 2 == 0) {
+					$date_from = $from->format("Y-m-d")." ".$i.":00:00";
+					$date_end = $to->format("Y-m-d")." ".($i+2).":00:00";
+
+					$votes = Vote::where('election_id', $election->id)->whereBetween('created_at', [$date_from, $date_end])->groupBy('user_id')->count();
+
+					array_push($title, Carbon::parse($date_from)->format('h:i A'));
+					array_push($value, $votes);
+				}
+			}
+			return [$title, $value];
+		}
+
+		foreach ($listOfDates as $key => $date) {
+			if ($key == 0) {
+				# code...
+			} elseif (($key+1) == count($listOfDates)) {
+				# code...
+			} else {
+
+			}
+		}
+		return [$title, $value];
 	}
 }

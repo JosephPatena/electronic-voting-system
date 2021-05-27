@@ -47,7 +47,7 @@ class CourseController extends Controller
         }
 
         Degree::create($request->all());
-        toastr()->success("Title/Degree saved successfully.");
+        toastr()->success("Degree saved successfully.");
         return redirect()->back();
     }
 
@@ -82,7 +82,18 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $check = Validator::make($request->all(), [
+            'name' => ['required', 'max:255']
+        ]);
+
+        if ($check->fails()) {
+            toastr()->error($check->messages()->first());
+            return redirect()->back()->withInput();
+        }
+
+        Degree::findOrFail($id)->update($request->all());
+        toastr()->success("Degree updated successfully.");
+        return redirect()->back();
     }
 
     /**
@@ -93,6 +104,8 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Degree::destroy($id);
+        toastr()->success("Degree deleted successfully.");
+        return redirect()->back();
     }
 }

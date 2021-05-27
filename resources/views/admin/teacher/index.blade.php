@@ -70,6 +70,7 @@
 	                <th>Email</th>
 	                <th>Date Registered</th>
 	                <th>Students</th>
+	                <th>Status</th>
 	              </tr>
 	              </thead>
 	              <tbody>
@@ -79,6 +80,8 @@
 	              			<td>{{ $value->email }}</td>
 	              			<td>{{ $value->teachers_key->email }}</td>
 	              			<td><span class="badge badge-primary">{{ $value->created_at }}</span></td>
+	              			<td></td>
+	              				{{ Helper::students($value->id)->count() }}
 	              			<td>
 	              				<form action="{{ route('teachers.destroy', $value->id) }}" method="POST">
                                     @csrf
@@ -86,10 +89,14 @@
                                     <i class="fas fa-ellipsis-v" style="float: right; cursor: pointer;" data-toggle="dropdown"></i>
                                     <div role="menu" class="dropdown-menu">
                                         <a href="{{ route('teachers.show', $value->id) }}" class="dropdown-item">Manage</a>
-                                        <a href="#" class="dropdown-item delete-contact">Disable Access</a>
+                                        <a href="{{ route('enable_disable_access', encrypt($value->id)) }}" class="dropdown-item">{{ $value->restricted ? "Enable Access" : "Disable Access" }}</a>
                                     </div>
                                 </form>
-	              				{{ Helper::students($value->id)->count() }}
+                                @if($value->restricted)
+		                          <span class="badge badge-warning">Access Disabled</span>
+		                        @else
+		                          <span class="badge badge-success">Access Enabled</span>
+		                        @endif
 	              			</td>
 	              		</tr>
 	              	@endforeach

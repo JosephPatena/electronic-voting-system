@@ -58,7 +58,7 @@
 	              			<td>
 		                        <ul class="list-inline">
 		                        	@foreach($election->candidates->take(10) as $candidate)
-			                            <li class="list-inline-item">
+			                            <li class="list-inline-item open-url" data-url="{{ route('candidates.show', $candidate->id) }}">
 			                                <img style="cursor: pointer;" title="{{ $candidate->name }}" alt="Avatar" class="table-avatar" src="{{ !empty($candidate->image->hash_name) ? url('storage/image/'. $candidate->image->hash_name) : asset('dist/img/default-candidate.png') }}">
 			                            </li>
 		                        	@endforeach

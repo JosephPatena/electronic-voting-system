@@ -79,7 +79,7 @@
                     <a href="#" class="btn btn-sm bg-teal">
                       <i class="fa fa-edit"></i>
                     </a>
-                    <a href="#" class="btn btn-sm btn-primary">
+                    <a href="{{ route('candidates.show', $value->id) }}" class="btn btn-sm btn-primary">
                       <i class="fas fa-user"></i>&nbsp;&nbsp;View Profile
                     </a>
                   </div>
