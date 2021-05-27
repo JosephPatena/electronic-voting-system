@@ -118,12 +118,23 @@
                   Position <span style="color: red">*</span>
                   <button class="btn btn-primary btn-xs float-right new-row"><i class="fa fa-plus-circle"></i>&nbsp;&nbsp;New Row</button>
                 </label>
-                <div class="input-group" style="margin-bottom: 10px" id="original">
+                <div class="row" style="margin-bottom: 10px" id="original">
+                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                    
                     <input type="text" class="form-control" placeholder="Position Name" name="position_name[]" required="">
-                    <div class="input-group-append">
-                        <input type="number" class="form-control" placeholder="Number Elected" name="number_elected[]" required="">
-                    </div>
-                    <i class="fa fa-times-circle remove-row" style="display: none; color: red; margin-top: 10px; margin-left: 10px; cursor: pointer;"></i>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    
+                    <input type="number" class="form-control" placeholder="Max Selected" name="max_selected[]" required="">
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    
+                    <input type="number" class="form-control" placeholder="Number Elected" name="number_elected[]" required="">
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                    
+                    <i class="fa fa-times-circle remove-row" style="display: none; color: red; cursor: pointer;"></i>
+                  </div>
                 </div>
               </div>
               <!-- /.form-group -->
@@ -289,14 +300,14 @@
     $('button.new-row').on('click', function(evt){
       evt.preventDefault();
 
-      $('#original').children().css('display', 'inline')
+      $('#original').find('i').css('display', 'inline')
       var form_group = $('#original').clone()
 
       $('div.positions').append(form_group)
     })
 
     $(document).on('click', 'i.remove-row', function(evt){
-      $(this).parent().remove()
+      $(this).parent().parent().remove()
     })
   </script>
 @endsection

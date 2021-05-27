@@ -173,6 +173,9 @@ class CandidateController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Candidate::destroy(decrypt($id));
+
+        toastr()->success("Candidate deleted successfully.");
+        return redirect()->back();
     }
 }

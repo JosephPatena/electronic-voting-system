@@ -70,7 +70,8 @@ class ElectionController extends Controller
             Position::create([
                 'election_id' => $new->id,
                 'name' => $value,
-                'number_elected' => $request->number_elected[$key]
+                'number_elected' => $request->number_elected[$key],
+                'max_selected' => $request->max_selected[$key]
             ]);
         }
 

@@ -76,12 +76,19 @@
                 </div>
                 <div class="card-footer">
                   <div class="text-right">
-                    <a data-toggle="modal" data-target="#update-candidate-{{ $key }}" class="btn btn-sm bg-teal">
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a href="{{ route('candidates.show', $value->id) }}" class="btn btn-sm btn-primary">
-                      <i class="fas fa-user"></i>&nbsp;&nbsp;View Profile
-                    </a>
+                      <form action="{{ route('candidates.destroy', encrypt($value->id)) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                      </form>
+                      <button class="btn btn-sm bg-danger delete-candidate">
+                        <i class="fa fa-trash-alt"></i>
+                      </button>
+                      <a data-toggle="modal" data-target="#update-candidate-{{ $key }}" class="btn btn-sm bg-teal">
+                        <i class="fa fa-edit"></i>
+                      </a>
+                      <a href="{{ route('candidates.show', $value->id) }}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-user"></i>&nbsp;&nbsp;View Profile
+                      </a>
                   </div>
                 </div>
               </div>
@@ -196,6 +203,17 @@
         return true;
       }
       $(this).siblings().attr("src", $(this).data('old_src'));
+    })
+
+    $('button.delete-candidate').on('click', function(evt){
+      evt.preventDefault();
+      let element = $(this);
+
+      let check = confirm("Are you sure you want to delete this item?");
+
+      if (check) {
+        element.siblings('form').submit()
+      }
     })
   </script>
 @endsection

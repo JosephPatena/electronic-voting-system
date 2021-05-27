@@ -223,12 +223,19 @@
                   </div>
                   <div class="card-footer">
                     <div class="text-right">
-                      <a data-toggle="modal" data-target="#update-candidate-{{ $key }}" class="btn btn-sm bg-teal">
-                        <i class="fa fa-edit"></i>
-                      </a>
-                      <a href="{{ route('candidates.show', $value->id) }}" class="btn btn-sm btn-primary">
-                        <i class="fas fa-user"></i>&nbsp;&nbsp;View Profile
-                      </a>
+                        <form action="{{ route('candidates.destroy', encrypt($value->id)) }}" method="post">
+                          @csrf
+                          @method('DELETE')
+                        </form>
+                        <button class="btn btn-sm bg-danger delete-candidate">
+                          <i class="fa fa-trash-alt"></i>
+                        </button>
+                        <a data-toggle="modal" data-target="#update-candidate-{{ $key }}" class="btn btn-sm bg-teal">
+                          <i class="fa fa-edit"></i>
+                        </a>
+                        <a href="{{ route('candidates.show', $value->id) }}" class="btn btn-sm btn-primary">
+                          <i class="fas fa-user"></i>&nbsp;&nbsp;View Profile
+                        </a>
                     </div>
                   </div>
                 </div>
@@ -343,6 +350,12 @@
               <label class="col-sm-4 col-form-label">Number Elected <span style="color: red">*</span></label>
               <div class="col-sm-8">
                 <input type="number" class="form-control" name="number_elected" placeholder="Number Elected" value="{{ old('number_elected') }}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Max Selected <span style="color: red">*</span></label>
+              <div class="col-sm-8">
+                <input type="number" class="form-control" name="max_selected" placeholder="Max Selected" value="{{ old('max_selected') }}">
               </div>
             </div>
           </div>
@@ -577,6 +590,15 @@
       $(this).siblings('button').show()
     })
 
-    
+    $('button.delete-candidate').on('click', function(evt){
+      evt.preventDefault();
+      let element = $(this);
+
+      let check = confirm("Are you sure you want to delete this item?");
+
+      if (check) {
+        element.siblings('form').submit()
+      }
+    })
   </script>
 @endsection
