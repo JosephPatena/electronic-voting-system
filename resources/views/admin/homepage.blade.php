@@ -126,74 +126,61 @@
 	        <!-- small box -->
 	        <div class="small-box bg-success">
 	          <div class="inner">
-	            <h3>53<sup style="font-size: 20px">%</sup></h3>
+	            <h3>{{ $election->votes->groupBy('user_id')->count() }}<sup style="font-size: 20px">%</sup></h3>
 
 	            <p>Participation</p>
 	          </div>
 	          <div class="icon">
-	            <i class="ion ion-stats-bars"></i>
+	            <i class="fas fa-hands-helping"></i>
 	          </div>
-	          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	        </div>
 	        <!-- small box -->
 	        <div class="small-box bg-info">
 	          <div class="inner">
-	            <h3>150</h3>
+	            <h3>{{ $election->users->where('role_id', 3)->count() }}</h3>
 
-	            <p>Voters</p>
+	            <p>Students</p>
 	          </div>
 	          <div class="icon">
-	            <i class="ion ion-bag"></i>
+	            <i class="fas fa-users"></i>
 	          </div>
-	          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	          <a href="{{ route('students_list') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	        </div>
 	        <!-- small box -->
-	        <div class="small-box bg-warning">
+	        <div class="small-box bg-primary">
 	          <div class="inner">
-	            <h3>44</h3>
+	            <h3>{{ $election->users->where('role_id', 2)->count() }}</h3>
 
 	            <p>Teachers</p>
 	          </div>
 	          <div class="icon">
-	            <i class="ion ion-person-add"></i>
+	            <i class="fas fa-chalkboard-teacher"></i>
 	          </div>
-	          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	          <a href="{{ route('teachers.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	        </div>
 	        <!-- small box -->
-	        <div class="small-box bg-danger">
+	        <div class="small-box bg-warning">
 	          <div class="inner">
-	            <h3>65</h3>
-
-	            <p>Course</p>
-	          </div>
-	          <div class="icon">
-	            <i class="ion ion-pie-graph"></i>
-	          </div>
-	          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-	        </div>
-	        <!-- small box -->
-	        <div class="small-box bg-danger">
-	          <div class="inner">
-	            <h3>65</h3>
+	            <h3>{{ $election->positions->count() }}</h3>
 
 	            <p>Position</p>
 	          </div>
 	          <div class="icon">
-	            <i class="ion ion-pie-graph"></i>
+	            <i class="fas fa-layer-group"></i>
 	          </div>
-	          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	          <a href="{{ route('elections.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	        </div>
 	        <!-- small box -->
 	        <div class="small-box bg-danger">
 	          <div class="inner">
-	            <h3>65</h3>
+	            <h3>{{ $election->candidates->count() }}</h3>
 
 	            <p>Candidates</p>
 	          </div>
 	          <div class="icon">
-	            <i class="ion ion-pie-graph"></i>
+	            <i class="fas fa-address-card"></i>
 	          </div>
-	          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	          <a href="{{ route('candidates.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	        </div>
 	      </div>
 	      <!-- ./col -->

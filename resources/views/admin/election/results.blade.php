@@ -74,32 +74,27 @@
 	              <ul class="nav flex-column">
 	                <li class="nav-item">
 	                  <a href="#" class="nav-link">
-	                    Participation <span class="float-right badge bg-primary">31%</span>
+	                    Participation <span class="float-right badge bg-primary">{{ $election->votes->groupBy('user_id')->count() }}%</span>
 	                  </a>
 	                </li>
 	                <li class="nav-item">
 	                  <a href="#" class="nav-link">
-	                    Voters <span class="float-right badge bg-info">5</span>
+	                    Students <span class="float-right badge bg-info">{{ $election->users->where('role_id', 3)->count() }}</span>
 	                  </a>
 	                </li>
 	                <li class="nav-item">
 	                  <a href="#" class="nav-link">
-	                    Teachers <span class="float-right badge bg-success">12</span>
+	                    Teachers <span class="float-right badge bg-success">{{ $election->users->where('role_id', 2)->count() }}</span>
 	                  </a>
 	                </li>
 	                <li class="nav-item">
 	                  <a href="#" class="nav-link">
-	                    Course <span class="float-right badge bg-danger">842</span>
+	                    Position <span class="float-right badge bg-danger">{{ $election->positions->count() }}</span>
 	                  </a>
 	                </li>
 	                <li class="nav-item">
 	                  <a href="#" class="nav-link">
-	                    Position <span class="float-right badge bg-danger">842</span>
-	                  </a>
-	                </li>
-	                <li class="nav-item">
-	                  <a href="#" class="nav-link">
-	                    Candidates <span class="float-right badge bg-danger">842</span>
+	                    Candidates <span class="float-right badge bg-warning">{{ $election->candidates->count() }}</span>
 	                  </a>
 	                </li>
 	                <li class="nav-item">

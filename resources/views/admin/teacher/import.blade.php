@@ -57,7 +57,7 @@
   		    <!-- Widget: user widget style 1 -->
           <div class="card card-widget widget-user">
             <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header text-white" style="background: url('../dist/img/photo1.png') center center;">
+            <div class="widget-user-header text-white" style="background: url({{ asset('dist/img/import-format.png') }}) center center; background-repeat: no-repeat;">
             </div>
             <div class="card-footer">
               <div id="actions" class="row">
