@@ -37,10 +37,14 @@
 	<section class="content">
 	  <div class="container-fluid">
 	    <div class="row">
+        @php
+          $election = Helper::get_active_election();
+        @endphp
+        
+        @if(count(Helper::get_elections()) > 1)
         <div class="col-md-12">
           <div class="btn-group">
-            <button type="button" class="btn btn-info btn-sm">{{ Helper::get_active_election() ? Helper::get_active_election()->name : "No Election Found" }}</button>
-            @if(count(Helper::get_elections()) > 1)
+            <button type="button" class="btn btn-info btn-sm">{{ $election->name ? $election->name : "No Election Found" }}</button>
               <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                 <span class="sr-only">Toggle Dropdown</span>
               </button>
@@ -49,10 +53,10 @@
                   <a class="dropdown-item" href="{{ route('navigate', encrypt($value->id)) }}">{{ $value->name }}</a>
                 @endforeach
               </div>
-            @endif
           </div>
         </div>
         <br><br>
+        @endif
 	      <div class="col-md-5">
   		    <!-- Widget: user widget style 1 -->
           <div class="card card-widget widget-user">

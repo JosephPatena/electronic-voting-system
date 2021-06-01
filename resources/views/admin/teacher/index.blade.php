@@ -64,14 +64,14 @@
 	          <div class="card-body">
 	            <table id="example1" class="table table-bordered table-striped">
 	              <thead>
-	              <tr>
-	                <th>Name</th>
-	                <th>Username</th>
-	                <th>Email</th>
-	                <th>Date Registered</th>
-	                <th>Students</th>
-	                <th>Status</th>
-	              </tr>
+		              <tr>
+		                <th>Name</th>
+		                <th>Username</th>
+		                <th>Email</th>
+		                <th>Date Registered</th>
+		                <th>Students</th>
+		                <th>Status</th>
+		              </tr>
 	              </thead>
 	              <tbody>
 	              	@foreach($teachers as $value)
@@ -80,8 +80,9 @@
 	              			<td>{{ $value->email }}</td>
 	              			<td>{{ $value->teachers_key->email }}</td>
 	              			<td><span class="badge badge-primary">{{ $value->created_at }}</span></td>
-	              			<td></td>
+	              			<td>
 	              				{{ Helper::students($value->id)->count() }}
+	              			</td>
 	              			<td>
 	              				<form action="{{ route('teachers.destroy', $value->id) }}" method="POST">
                                     @csrf
