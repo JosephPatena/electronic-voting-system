@@ -126,7 +126,7 @@
 	        <!-- small box -->
 	        <div class="small-box bg-success">
 	          <div class="inner">
-	            <h3>{{ $election->votes->groupBy('user_id')->count() }}<sup style="font-size: 20px">%</sup></h3>
+	            <h3>{{ !empty($election) ? $election->votes->groupBy('user_id')->count() : 0 }}<sup style="font-size: 20px">%</sup></h3>
 
 	            <p>Participation</p>
 	          </div>
@@ -137,7 +137,7 @@
 	        <!-- small box -->
 	        <div class="small-box bg-info">
 	          <div class="inner">
-	            <h3>{{ $election->users->where('role_id', 3)->count() }}</h3>
+	            <h3>{{ !empty($election) ? $election->users->where('role_id', 3)->count() : 0 }}</h3>
 
 	            <p>Students</p>
 	          </div>
@@ -149,7 +149,7 @@
 	        <!-- small box -->
 	        <div class="small-box bg-primary">
 	          <div class="inner">
-	            <h3>{{ $election->users->where('role_id', 2)->count() }}</h3>
+	            <h3>{{ !empty($election) ? $election->users->where('role_id', 2)->count() : 0 }}</h3>
 
 	            <p>Teachers</p>
 	          </div>
@@ -161,7 +161,7 @@
 	        <!-- small box -->
 	        <div class="small-box bg-warning">
 	          <div class="inner">
-	            <h3>{{ $election->positions->count() }}</h3>
+	            <h3>{{ !empty($election) ? $election->positions->count() : 0 }}</h3>
 
 	            <p>Position</p>
 	          </div>
@@ -173,7 +173,7 @@
 	        <!-- small box -->
 	        <div class="small-box bg-danger">
 	          <div class="inner">
-	            <h3>{{ $election->candidates->count() }}</h3>
+	            <h3>{{ !empty($election) ? $election->candidates->count() : 0 }}</h3>
 
 	            <p>Candidates</p>
 	          </div>

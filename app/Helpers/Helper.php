@@ -103,43 +103,47 @@ class Helper
 	}
 
 	public static function get_hours($election){
-		$from = new DateTime($election->date_start);
-		$to = new DateTime($election->date_end);
-		$period = CarbonPeriod::create($from, $to);
-
-		foreach ($period as $date) {
-		  $listOfDates[] = $date->format('Y-m-d H:i:s');
-		}
-
 		$title = array();
 		$value = array();
-		if (count($listOfDates) == 1) {
-			$start = $from->format('H');
-			$end = $to->format('H');
 
-			for ($i=$start; $i <= $end; $i++) {
-				if ($i % 2 == 0) {
-					$date_from = $from->format("Y-m-d")." ".$i.":00:00";
-					$date_end = $to->format("Y-m-d")." ".($i+2).":00:00";
+		if (!empty($election)) {
+			$from = new DateTime($election->date_start);
+			$to = new DateTime($election->date_end);
+			$period = CarbonPeriod::create($from, $to);
 
-					$votes = Vote::where('election_id', $election->id)->whereBetween('created_at', [$date_from, $date_end])->groupBy('user_id')->count();
+			foreach ($period as $date) {
+			  $listOfDates[] = $date->format('Y-m-d H:i:s');
+			}
 
-					array_push($title, Carbon::parse($date_from)->format('h:i A'));
-					array_push($value, $votes);
+			if (count($listOfDates) == 1) {
+				$start = $from->format('H');
+				$end = $to->format('H');
+
+				for ($i=$start; $i <= $end; $i++) {
+					if ($i % 2 == 0) {
+						$date_from = $from->format("Y-m-d")." ".$i.":00:00";
+						$date_end = $to->format("Y-m-d")." ".($i+2).":00:00";
+
+						$votes = Vote::where('election_id', $election->id)->whereBetween('created_at', [$date_from, $date_end])->groupBy('user_id')->count();
+
+						array_push($title, Carbon::parse($date_from)->format('h:i A'));
+						array_push($value, $votes);
+					}
+				}
+				return [$title, $value];
+			}
+
+			foreach ($listOfDates as $key => $date) {
+				if ($key == 0) {
+					# code...
+				} elseif (($key+1) == count($listOfDates)) {
+					# code...
+				} else {
+
 				}
 			}
-			return [$title, $value];
 		}
-
-		foreach ($listOfDates as $key => $date) {
-			if ($key == 0) {
-				# code...
-			} elseif (($key+1) == count($listOfDates)) {
-				# code...
-			} else {
-
-			}
-		}
+		
 		return [$title, $value];
 	}
 }
