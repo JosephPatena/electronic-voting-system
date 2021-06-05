@@ -137,8 +137,8 @@
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <div class="dropdown-menu" role="menu">
-                    <a class="dropdown-item" href="{{ route('invite_students', "not_register") }}" style="font-size: 12px;">Not Registered</a>
-                    <a class="dropdown-item" href="{{ route('invite_students', "uninvited") }}" style="font-size: 12px;">Not Yet Invited</a>
+                    <a class="dropdown-item" href="{{ route('invite_teachers', "not_register") }}" style="font-size: 12px;">Not Registered</a>
+                    <a class="dropdown-item" href="{{ route('invite_teachers', "uninvited") }}" style="font-size: 12px;">Not Yet Invited</a>
                   </div>
               </div>
 	            <h3 class="card-title">Imported Data</h3>
