@@ -121,7 +121,7 @@ class StudentController extends Controller
         {
             $keys = StudentsKey::whereNull('user_id')->get();
         }
-        if ($type == "uninvited")
+        elseif ($type == "uninvited")
         {
             $keys = StudentsKey::whereNull('user_id')->where('is_invited', false)->get();
         }

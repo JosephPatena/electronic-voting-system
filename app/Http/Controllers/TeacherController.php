@@ -122,7 +122,7 @@ class TeacherController extends Controller
         {
             $keys = TeachersKey::whereNull('user_id')->get();
         }
-        if ($type == "uninvited")
+        elseif ($type == "uninvited")
         {
             $keys = TeachersKey::whereNull('user_id')->where('is_invited', false)->get();
         }
